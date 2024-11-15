@@ -1,4 +1,6 @@
+import 'package:bloc_basics/cubit/counter_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -10,13 +12,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  final counterCubit = CounterCubit();
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +28,47 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            BlocBuilder<CounterCubit, int>(
+              bloc: counterCubit,
+              builder: (context, counter) {
+                return Text(
+                  '$counter',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton.filled(
+            onPressed: () {
+              counterCubit.increment();
+            },
+            icon: const Icon(Icons.add),
+            tooltip: 'Increment',
+            style: IconButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              padding: const EdgeInsets.all(10),
+            ),
+          ),
+          const SizedBox(height: 10),
+          IconButton.filledTonal(
+            onPressed: () {
+              counterCubit.decrement();
+            },
+            icon: const Icon(Icons.remove),
+            tooltip: 'Decrement',
+            style: IconButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              padding: const EdgeInsets.all(10),
+            ),
+          ),
+        ],
       ),
     );
   }
