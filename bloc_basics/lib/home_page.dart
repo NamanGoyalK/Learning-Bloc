@@ -1,25 +1,20 @@
 import 'package:bloc_basics/cubit/counter_cubit.dart';
+import 'package:bloc_basics/inc_dec_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final counterCubit = CounterCubit();
-
-  @override
   Widget build(BuildContext context) {
+    final counterCubit = BlocProvider.of<CounterCubit>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child: Column(
@@ -40,35 +35,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton.filled(
-            onPressed: () {
-              counterCubit.increment();
-            },
-            icon: const Icon(Icons.add),
-            tooltip: 'Increment',
-            style: IconButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              padding: const EdgeInsets.all(10),
-            ),
-          ),
-          const SizedBox(height: 10),
-          IconButton.filledTonal(
-            onPressed: () {
-              counterCubit.decrement();
-            },
-            icon: const Icon(Icons.remove),
-            tooltip: 'Decrement',
-            style: IconButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              padding: const EdgeInsets.all(10),
-            ),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => const IncDecPage()));
+        },
+        tooltip: 'Controls',
+        child: const Icon(Icons.navigate_next_rounded),
       ),
     );
   }
